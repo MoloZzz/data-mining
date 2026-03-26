@@ -5,24 +5,22 @@ import numpy as np
 from sklearn.metrics import accuracy_score
 
 from one_rule import OneRule
-from kNN import KNN
+from knn import KNN
 from naive_bayes import NaiveBayes
 
 def load_data(path):
-    df = pd.read_csv(path, sep=";")
+    df = pd.read_csv(path, sep=",")
     return df
 
 def preprocess(df):
-    y = df["y"]
-    X = df.drop("y", axis=1)
-
-    X = X.replace("unknown", np.nan)
+    y = df["deposit"]
+    X = df.drop("deposit", axis=1)
 
     for col in X.columns:
         if X[col].dtype == "object":
-            X[col].fillna(X[col].mode()[0], inplace=True)
+            X[col] = X[col].fillna("MISSING")
         else:
-            X[col].fillna(X[col].mean(), inplace=True)
+            X[col] = X[col].fillna(X[col].mean())
 
     X_encoded = pd.get_dummies(X)
 
@@ -31,7 +29,7 @@ def preprocess(df):
 
 def main():
     df = load_data("dataset/bank.csv")
-
+    print(df.columns.tolist())
     X_raw, X_encoded, y = preprocess(df)
 
     X_train_raw, X_test_raw, y_train, y_test = train_test_split(
