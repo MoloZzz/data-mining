@@ -126,7 +126,7 @@ def encode(df: pd.DataFrame) -> pd.DataFrame:
         df["month"] = df["month"].map(ORDINAL_MONTH)
 
     # Решта категоріальних → one-hot (contact, job, marital, poutcome)
-    cat_cols = [c for c in df.select_dtypes(include="object").columns if c != "y"]
+    cat_cols = [c for c in df.select_dtypes(include="object").columns if c != "deposit"]
     if cat_cols:
         df = pd.get_dummies(df, columns=cat_cols, drop_first=True)
         print(f"[encode] One-hot: {cat_cols}")
